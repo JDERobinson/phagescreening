@@ -94,12 +94,19 @@ class compiler(): #chunks fasta sequences by coding regions and returns organism
         def __init__(self, ID, orgGenome, orgProteome = None):
             self.id = ID
             self.genome = orgGenome
+            
             if orgProteome:
-                self.proteome = self.__chunk_fasta(self.genome, orgProteome)
-            else: self.proteome = None
+                self.proteome = self.__chunk_CDS(self.genome, orgProteome)
+                self.nonCDS = self.__chunk_NonCDS(self.genome, orgProteome)
+            
+            else: 
+                self.proteome = 'Proteome not supplied'
+                self.nonCDS = 'Proteome not supplied'
+
+            
         
-        def __chunk_fasta(self, cfGenome, cfProteome):
-            chunks = {}
+        def __chunk_CDS(self, cfGenome, cfProteome):
+            CDSchunks = {}
 
             for protein in cfProteome:
                # print(cfProteome[protein])
@@ -108,11 +115,55 @@ class compiler(): #chunks fasta sequences by coding regions and returns organism
                 end = cfProteome[protein][1][1] 
                 pdt = cfProteome[protein][0]
               #  print(pdt)
-                cds = [pdt, (start, end), cfGenome[start:end]]
-                chunks[protein] = cds 
-            
-            return chunks
+                cds = [pdt, (start+1, end+1), cfGenome[start:end]] #python is zero based indexing, so had to substract 1 to slice correctly, 
+                                                                    #location within genome is not actually zero based, so need to add back in 1 to get the 
+                                                                    # right location
+                CDSchunks[protein] = cds 
+            return CDSchunks
         
+        def __chunk_NonCDS(self, cfGenome, cfProteome): #chunk non-coding regions
+            nonCDSChunks = {}
+            TAG_LIST = [key for key in cfProteome.keys()]
+            LENGTH = len(TAG_LIST)
+        #    print(LENGTH)
+            
+            for i in range(LENGTH-1):
+
+                if i == 0: #if at start of protein list
+                    first = cfProteome[TAG_LIST[0]] #get first protein
+                    firstStart = first[1][0] #get start location of first protein
+                    nonCDSChunks[(0, firstStart+1)] = cfGenome[0:firstStart]
+              #      print('this is the start of the list', i, firstStart)
+
+                    nonCDSChunks = self.__help__chunk_NonCDS(i, TAG_LIST, cfProteome, cfGenome, nonCDSChunks)
+                
+                elif i == LENGTH-1: #if at the last gene of genome
+                    last = cfProteome[TAG_LIST[LENGTH-1]]
+                    lastEnd = last[1][1]
+             #       print('this is the end of the list', i, lastEnd)
+                    nonCDSChunks[lastEnd+1,len(cfGenome)] = cfGenome[lastEnd:len(cfGenome)-1]
+                
+                elif i < LENGTH-1:
+                    nonCDSChunks = self.__help__chunk_NonCDS(i, TAG_LIST, cfProteome, cfGenome, nonCDSChunks)
+        
+            return nonCDSChunks
+
+
+        def __help__chunk_NonCDS(self, i, TAG_LIST, cfProteome, cfGenome, nonCDSChunks):
+            curr = cfProteome[TAG_LIST[i]] 
+           # print('this is the current protein', curr)
+            next = cfProteome[TAG_LIST[i+1]]
+          #  print('this is the next protein', i+1, next)
+
+            currEnd = curr[1][1] #get end location of current protein
+            nextStart = next[1][0] #get start location of next protein
+
+            if currEnd < nextStart:
+                nonCDSChunks[(currEnd+1, nextStart+1)] = cfGenome[currEnd:nextStart] #get region of genome between end of curr to begininning of next
+                                                                                    #stored by actual location in genome
+            return nonCDSChunks
+
+                        
         def __str__(self): ##summary statement of an organism, prints ID, length of genome, and number of genes + tags
             if self.proteome:
                 protein_products = [self.proteome[item][0][0] for item in self.proteome.keys()]
@@ -167,4 +218,16 @@ if __name__ == '__main__':
    # print(c.get_organism('KJ510414.1'))
 
     d = c.get_organism('KJ510414.1')
-    print(d)
+    print(d.nonCDS)
+   # print(d)
+ #   e = [] #retrive a list of organisms and iterate over them --> this will be crucial for the screener to work
+''' for item in c.all_organisms().keys():
+        e.append(c.get_organism(item))
+    for x in e:
+        for y in x.proteome:
+            print(x.proteome[y][0]) # product
+            print(x.proteome[y][1]) # protein location
+            print(x.proteome[y][2]) # sequence'''
+
+
+    
