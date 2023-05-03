@@ -115,10 +115,10 @@ class compiler(): #chunks fasta sequences by coding regions and returns organism
         
         def __str__(self): ##summary statement of an organism, prints ID, length of genome, and number of genes + tags
             if self.proteome:
-              #  s = (f'Reference ID: {self.id}\nGenome length: {len(self.genome)}\nNumber of proteins: {len(self.proteome)}',
-                    # f'\nProteins: {[item for item in self.proteome[item][0]]}') 
-           
-               # return 
+                protein_products = [self.proteome[item][0][0] for item in self.proteome.keys()]
+                s = (f'Reference ID: {self.id}\nGenome length: {len(self.genome)}\nNumber of proteins: {len(self.proteome)}' 
+                    f'\nProteins: {protein_products}')           
+                return s
             
    
     def __compile_organisms(self, genomes, proteomes): #makes dictionary of all organisms
@@ -166,8 +166,5 @@ if __name__ == '__main__':
    # print(c.all_organisms())
    # print(c.get_organism('KJ510414.1'))
 
-   # d = c.get_organism('KJ510414.1')
-   # print(type(d.proteome))
-
-    e = c.all_organisms()
-    print(e['KJ510414.1'].proteome)
+    d = c.get_organism('KJ510414.1')
+    print(d)
