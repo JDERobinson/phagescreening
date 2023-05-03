@@ -28,19 +28,27 @@ class processor(): #this processes a single .gb and fasta file with one entry
         prots = {}
    
         for record in SeqIO.parse(gbFiles, 'gb'):
-            
-            cdsRegions = {}
-            
+                        
             feats = record.features
             protID = record.id
             
-            for i in range(1,len(feats)):
-                INFO = []
-                tag = feats[i].qualifiers['locus_tag']
-                loc = feats[i].location
+            PDTS = []
+            TAGS = []
+            LOCS = [] 
+            
+            for i in range(0, len(feats), 2):
                 pdt = feats[i].qualifiers.get('product')
-                INFO = [loc, pdt]
-                cdsRegions[tag[0]] = INFO
+                PDTS.append(pdt) 
+
+            for i in range(1, len(feats), 2):
+                tag = feats[i].qualifiers['locus_tag'][0]
+                TAGS.append(tag)
+                loc = (int(feats[i].location.start) - 1, int(feats[i].location.end) -1) #get start and end positions within fasta, 
+                                                                                        #python is 0 based indexing so gb start/end need to subtract 1
+                LOCS.append(loc)
+            
+            INFO = list(zip(PDTS[1:], LOCS))               
+            cdsRegions = dict(zip(TAGS, INFO))
             prots[protID] = cdsRegions
         
         return prots
@@ -88,24 +96,30 @@ class compiler(): #chunks fasta sequences by coding regions and returns organism
             self.genome = orgGenome
             if orgProteome:
                 self.proteome = self.__chunk_fasta(self.genome, orgProteome)
+            else: self.proteome = None
         
         def __chunk_fasta(self, cfGenome, cfProteome):
             chunks = {}
 
             for protein in cfProteome:
+               # print(cfProteome[protein])
                 cds = []
-                start = cfProteome[protein][0].start - 1 
-                end = cfProteome[protein][0].end - 1 #get start and end positions within fasta, 
-                                        #python is 0 based indexing so gb start/end need to subtract 1
-                cds = [(start, end), cfGenome[start:end]]
+                start = cfProteome[protein][1][0]
+                end = cfProteome[protein][1][1] 
+                pdt = cfProteome[protein][0]
+              #  print(pdt)
+                cds = [pdt, (start, end), cfGenome[start:end]]
                 chunks[protein] = cds 
             
             return chunks
         
-        def __str__(self):
-            #should print ID, proteome, and genome for ea. organism
-            return f'Proteome: {self.proteome}'
-            #\nGenome:{self.genome}'
+        def __str__(self): ##summary statement of an organism, prints ID, length of genome, and number of genes + tags
+            if self.proteome:
+              #  s = (f'Reference ID: {self.id}\nGenome length: {len(self.genome)}\nNumber of proteins: {len(self.proteome)}',
+                    # f'\nProteins: {[item for item in self.proteome[item][0]]}') 
+           
+               # return 
+            
    
     def __compile_organisms(self, genomes, proteomes): #makes dictionary of all organisms
        
@@ -117,15 +131,11 @@ class compiler(): #chunks fasta sequences by coding regions and returns organism
     
         return organisms
   
-    ###TO DO
-        #make string representation of organism object 
-        #make string representation of compiler result 
         
-    
-    def get_organism(self, organismID):
+    def get_organism(self, organismID): #allows user to access an organism object based on ID
         return self.__organisms[organismID]
 
-    def all_organisms(self):
+    def all_organisms(self): #returns all organism objects as dictionaries, sorted by ID
         return self.__organisms
     
 
@@ -160,6 +170,4 @@ if __name__ == '__main__':
    # print(type(d.proteome))
 
     e = c.all_organisms()
-    print(type(e))
-    for organism in e:
-        print(e[organism].id)
+    print(e['KJ510414.1'].proteome)
