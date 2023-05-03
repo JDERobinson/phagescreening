@@ -1,0 +1,86 @@
+LOCUS       NC_024141              51378 bp    DNA     linear   PHG 08-JAN-2023
+DEFINITION  Mycobacterium phage Kampy, complete genome.
+ACCESSION   NC_024141
+VERSION     NC_024141.1
+DBLINK      BioProject: PRJNA485481
+KEYWORDS    RefSeq.
+SOURCE      Mycobacterium phage Kampy
+  ORGANISM  Mycobacterium phage Kampy
+            Viruses; Duplodnaviria; Heunggongvirae; Uroviricota;
+            Caudoviricetes; Backyardiganvirus.
+REFERENCE   1  (bases 1 to 51378)
+  CONSRTM   NCBI Genome Project
+  TITLE     Direct Submission
+  JOURNAL   Submitted (27-MAY-2014) National Center for Biotechnology
+            Information, NIH, Bethesda, MD 20894, USA
+REFERENCE   2  (bases 1 to 51378)
+  AUTHORS   Allen,E.A., Crossland,P.M., Dohou,A.-S.S., Halleran,A.D.,
+            Harris,J.V., Lawrence,O.C., Nagle,V.L., Ordonez,P.J., Smith,E.C.,
+            Valery,E.J., Williams,A.L., Williamson,K.E., Yuzawa,B.I.,
+            Bradley,K.W., Clarke,D.Q., Barker,L.P., Bailey,C., Asai,D.J.,
+            Bowman,C.A., Russell,D.A., Pope,W.H., Jacobs-Sera,D., Hendrix,R.W.
+            and Hatfull,G.F.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (27-FEB-2014) Pittsburgh Bacteriophage Institute and
+            Department of Biological Sciences, University of Pittsburgh, 365
+            Crawford Hall, Pittsburgh, PA 15260, USA
+COMMENT     PROVISIONAL REFSEQ: This record has not yet been subject to final
+            NCBI review. The reference sequence is identical to KJ510414.
+            Phage Isolation, DNA preparation, and annotation analysis performed
+            at College of William and Mary, Williamsburg, VA
+            Sequencing by Ion Torrent to approximately 1020x coverage was
+            performed at  Pittsburgh Bacteriophage Institute, University of
+            Pittsburgh, Pittsburgh, PA
+            Assembly performed with Newbler and Consed software as of Feb,
+            2012.
+            Supported by Science Education Alliance, Howard Hughes Medical
+            Institute, Chevy Chase, MD.
+            
+            ##Assembly-Data-START##
+            Assembly Method       :: Newbler and Consed v. Feb-2012
+            Coverage              :: 1020x
+            Sequencing Technology :: Ion Torrent
+            ##Assembly-Data-END##
+            COMPLETENESS: full length.
+FEATURES             Location/Qualifiers
+     source          1..51378
+                     /organism="Mycobacterium phage Kampy"
+                     /mol_type="genomic DNA"
+                     /isolation_source="soil, Williamsburg, VA"
+                     /db_xref="taxon:1486425"
+                     /lab_host="Mycobacterium smegmatis mc2 155"
+                     /country="USA"
+                     /lat_lon="37.271111 N 76.713890 W"
+                     /collection_date="01-Oct-2012"
+                     /collected_by="A. Halleran"
+                     /identified_by="A. Halleran"
+                     /note="complete genome"
+     gene            538..765
+                     /gene="1"
+                     /locus_tag="PBI_KAMPY_1"
+                     /db_xref="GeneID:19487639"
+     CDS             538..765
+                     /gene="1"
+                     /locus_tag="PBI_KAMPY_1"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="HNH endonuclease"
+                     /protein_id="YP_009031861.1"
+                     /db_xref="GeneID:19487639"
+                     /translation="MLEAAGYQCQIQGPGCLRKATDVDHIRRGDDHSRRNLQAACNRC
+                     HGRKSSAEGHARKRQLRAMRRRPIERHPGSR"
+     gene            803..1234
+                     /gene="2"
+                     /locus_tag="PBI_KAMPY_2"
+                     /db_xref="GeneID:19487552"
+     CDS             803..1234
+                     /gene="2"
+                     /locus_tag="PBI_KAMPY_2"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="hypothetical protein"
+                     /protein_id="YP_009031862.1"
+                     /db_xref="GeneID:19487552"
+                     /translation="MGERGPIGKRSDQRVRRNKTDNPVTKLPARGPVKQPQIGIPDAH
+                     PVVTQLWDSLAHSAQAQFYEPSDWAYARMALHFANQLLWSEKPNGQILATVNSMLNGL
+                     LVSEGDRRRVQLEIERNQADAVVVDVAAMFAQQLGAQQRSG"
